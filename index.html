@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Menu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#070707;
+      color:white;
+      overflow-x:hidden;
+      min-height:100vh;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:#ff6a00;
+      filter:blur(170px);
+      top:-250px;
+      right:-120px;
+      opacity:0.25;
+      z-index:-1;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      width:450px;
+      height:450px;
+      background:#0059ff;
+      filter:blur(170px);
+      bottom:-250px;
+      left:-120px;
+      opacity:0.18;
+      z-index:-1;
+    }
+
+    .welcome-screen{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:25px;
+    }
+
+    .welcome-box{
+      width:100%;
+      max-width:430px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      backdrop-filter:blur(25px);
+      border-radius:35px;
+      padding:50px 35px;
+      text-align:center;
+      box-shadow:0 25px 60px rgba(0,0,0,0.5);
+      animation:fadeUp 1s ease;
+    }
+
+    .logo{
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      object-fit:cover;
+      margin-bottom:25px;
+      border:4px solid rgba(255,255,255,0.1);
+      box-shadow:0 10px 35px rgba(255,106,0,0.35);
+    }
+
+    h1{
+      font-size:46px;
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    .subtitle{
+      color:#b8b8b8;
+      margin-bottom:35px;
+      line-height:1.7;
+    }
+
+    .language-buttons{
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    .language-buttons button{
+      border:none;
+      padding:16px;
+      border-radius:18px;
+      font-size:16px;
+      font-weight:600;
+      color:white;
+      cursor:pointer;
+      background:linear-gradient(135deg,#ff7a00,#ff5100);
+      transition:0.35s;
+      box-shadow:0 12px 30px rgba(255,122,0,0.35);
+    }
+
+    .language-buttons button:hover{
+      transform:translateY(-5px) scale(1.02);
+      box-shadow:0 18px 45px rgba(255,122,0,0.45);
+    }
+
+    .menu-screen{
+      display:none;
+      max-width:900px;
+      margin:auto;
+      padding:25px;
+    }
+
+    .hero{
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:35px;
+      padding:30px;
+      margin-bottom:30px;
+      backdrop-filter:blur(25px);
+      box-shadow:0 20px 50px rgba(0,0,0,0.4);
+      animation:fadeUp 1s ease;
+    }
+
+    /* FIX: Added Header Container Styles */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
+    .hero-logo{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      object-fit:cover;
+    }
+
+    .hero h2{
+      font-size:36px;
+      margin-bottom:10px;
+    }
+
+    .hero p{
+      color:#b9b9b9;
+      line-height:1.7;
+    }
+
+    /* REMOVED layout breaking margins from top-actions */
+    .top-actions{
+      display:flex;
+    }
+
+    .language-switch{
+      width:55px;
+      height:55px;
+      border:none;
+      border-radius:18px;
+      background:linear-gradient(135deg,#ff7a00,#ff5100);
+      color:white;
+      font-size:24px;
+      cursor:pointer;
+      transition:0.35s;
+      box-shadow:0 10px 30px rgba(255,122,0,0.35);
+    }
+
+    .language-switch:hover{
+      transform:translateY(-4px) scale(1.05);
+      box-shadow:0 15px 40px rgba(255,122,0,0.45);
+    }
+
+    .socials{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:25px;
+    }
+
+    .socials a{
+      width:58px;
+      height:58px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      color:white;
+      background:rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.06);
+      padding:12px 18px;
+      border-radius:15px;
+      transition:0.3s;
+    }
+
+    .socials img{
+      width:28px;
+      height:28px;
+      object-fit:contain;
+    }
+
+    .socials a:hover{
+      background:#ff7a00;
+      transform:translateY(-3px);
+    }
+
+    .category{
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:28px;
+      overflow:hidden;
+      margin-bottom:18px;
+      backdrop-filter:blur(25px);
+      box-shadow:0 10px 30px rgba(0,0,0,0.25);
+      animation:fadeUp 1s ease;
+    }
+
+    .category-header{
+      padding:24px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .category-header:hover{
+      background:rgba(255,255,255,0.03);
+    }
+
+    .category-left{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+
+    .icon{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#ff7a00,#ff5100);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:24px;
+      box-shadow:0 10px 25px rgba(255,122,0,0.3);
+    }
+
+    .category-name{
+      font-size:21px;
+      font-weight:600;
+    }
+
+    .plus{
+      font-size:34px;
+      color:#ff7a00;
+      transition:0.35s;
+    }
+
+    .category.active .plus{
+      transform:rotate(45deg);
+    }
+
+    .category-content{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.45s ease;
+    }
+
+    .item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:22px 24px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      transition:0.3s;
+    }
+
+    .item:hover{
+      background:rgba(255,255,255,0.03);
+    }
+
+    .item h4{
+      font-size:18px;
+      margin-bottom:5px;
+    }
+
+    .item p{
+      color:#a6a6a6;
+      font-size:14px;
+    }
+
+    .price{
+      font-size:18px;
+      font-weight:700;
+      color:#ff7a00;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(40px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media(max-width:700px){
+
+      h1{
+        font-size:38px;
+      }
+
+      .hero h2{
+        font-size:30px;
+      }
+
+      .item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+      }
+
+      .category-name{
+        font-size:18px;
+      }
+
+      .icon{
+        width:52px;
+        height:52px;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+  <section class="welcome-screen" id="welcomeScreen">
+
+    <div class="welcome-box">
+
+      <img src="logo.png" class="logo">
+
+      <h1 id="mainTitle">Dobrodošli</h1>
+
+      <p class="subtitle" id="mainSubtitle">
+        Odaberite jezik menija i istražite našu ponudu pića.
+      </p>
+
+      <div class="language-buttons">
+        <button onclick="openMenu('bs')">Bosanski</button>
+        <button onclick="openMenu('en')">English</button>
+        <button onclick="openMenu('de')">Deutsch</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="menu-screen" id="menuScreen">
+
+    <div class="hero">
+
+      <div class="header-container">
+        <img src="logo.png" class="hero-logo">
+
+        <div class="top-actions">
+          <button onclick="goHome()" class="language-switch">
+            🌐
+          </button>
+        </div>
+      </div>
+
+      <h2>Caffe Bar Digili</h2>
+
+      <p id="aboutText">
+        Moderan ambijent, vrhunska kafa i pažljivo odabrana ponuda pića.
+      </p>
+
+      <div class="socials">
+        <a href="https://www.instagram.com/digilibih/">
+          <img src="instagram.png" alt="Instagram">
+        </a>
+
+        <a href="https://www.facebook.com/">
+          <img src="facebook.png" alt="Facebook">
+        </a>
+
+        <a href="https://www.tiktok.com/">
+          <img src="tiktok.png" alt="TikTok">
+        </a>
+
+        <a href="https://www.google.com/maps">
+          <img src="location.png" alt="Location">
+        </a>
+      </div>
+
+    </div>
+
+    <div class="category">
+
+      <div class="category-header" onclick="toggleCategory(this)">
+
+        <div class="category-left">
+          <div class="icon">☕</div>
+          <div class="category-name" id="catHot">Topli Napici</div>
+        </div>
+
+        <div class="plus">+</div>
+
+      </div>
+
+      <div class="category-content">
+
+        <div class="item">
+          <div>
+            <h4>Espresso</h4>
+            <p id="espressoDesc">Klasična kafa</p>
+          </div>
+          <div class="price">2.50 KM</div>
+        </div>
+
+        <div class="item">
+          <div>
+            <h4>Cappuccino</h4>
+            <p id="cappuccinoDesc">Sa mliječnom pjenom</p>
+          </div>
+          <div class="price">3.50 KM</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="category">
+
+      <div class="category-header" onclick="toggleCategory(this)">
+
+        <div class="category-left">
+          <div class="icon">🥤</div>
+          <div class="category-name" id="catSoft">Gazirana Pića</div>
+        </div>
+
+        <div class="plus">+</div>
+
+      </div>
+
+      <div class="category-content">
+
+        <div class="item">
+          <div>
+            <h4>Coca Cola</h4>
+            <p id="colaDesc">0.25l</p>
+          </div>
+          <div class="price">3.00 KM</div>
+        </div>
+
+        <div class="item">
+          <div>
+            <h4>Sprite</h4>
+            <p id="spriteDesc">0.25l</p>
+          </div>
+          <div class="price">3.00 KM</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="category">
+
+      <div class="category-header" onclick="toggleCategory(this)">
+
+        <div class="category-left">
+          <div class="icon">🍺</div>
+          <div class="category-name" id="catBeer">Pive</div>
+        </div>
+
+        <div class="plus">+</div>
+
+      </div>
+
+      <div class="category-content">
+
+        <div class="item">
+          <div>
+            <h4>Heineken</h4>
+            <p id="heinekenDesc">0.33l</p>
+          </div>
+          <div class="price">4.50 KM</div>
+        </div>
+
+        <div class="item">
+          <div>
+            <h4>Corona</h4>
+            <p id="coronaDesc">0.33l</p>
+          </div>
+          <div class="price">5.00 KM</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  <div class="category">
+
+      <div class="category-header" onclick="toggleCategory(this)">
+
+        <div class="category-left">
+          <div class="icon">💧</div>
+          <div class="category-name" id="catWater">Vode</div>
+        </div>
+
+        <div class="plus">+</div>
+
+      </div>
+
+      <div class="category-content">
+
+        <div class="item">
+          <div>
+            <h4>Jana</h4>
+            <p id="janaDesc">0.33l</p>
+          </div>
+          <div class="price">2.50 KM</div>
+        </div>
+
+        <div class="item">
+          <div>
+            <h4>Sarajevski Kiseljak</h4>
+            <p id="kiseljakDesc">0.25l</p>
+          </div>
+          <div class="price">2.50 KM</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="category">
+
+      <div class="category-header" onclick="toggleCategory(this)">
+
+        <div class="category-left">
+          <div class="icon">🍊</div>
+          <div class="category-name" id="catJuice">Cijeđeni Sokovi</div>
+        </div>
+
+        <div class="plus">+</div>
+
+      </div>
+
+      <div class="category-content">
+
+        <div class="item">
+          <div>
+            <h4>Narandža</h4>
+            <p id="orangeDesc">Svježe cijeđeno</p>
+          </div>
+          <div class="price">5.50 KM</div>
+        </div>
+
+        <div class="item">
+          <div>
+            <h4>Limunada</h4>
+            <p id="lemonadeDesc">Domaća limunada</p>
+          </div>
+          <div class="price">4.50 KM</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="category">
+
+      <div class="category-header" onclick="toggleCategory(this)">
+
+        <div class="category-left">
+          <div class="icon">🍷</div>
+          <div class="category-name" id="catWine">Vina</div>
+        </div>
+
+        <div class="plus">+</div>
+
+      </div>
+
+      <div class="category-content">
+
+        <div class="item">
+          <div>
+            <h4>Crveno Vino</h4>
+            <p id="redwineDesc">Čaša</p>
+          </div>
+          <div class="price">6.00 KM</div>
+        </div>
+
+        <div class="item">
+          <div>
+            <h4>Bijelo Vino</h4>
+            <p id="whitewineDesc">Čaša</p>
+          </div>
+          <div class="price">6.00 KM</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <script>
+
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const menuScreen = document.getElementById('menuScreen');
+
+    const translations = {
+
+      bs:{
+        welcome:'Dobrodošli',
+        subtitle:'Odaberite jezik menija i istražite našu ponudu pića.',
+        about:'Moderan ambijent, vrhunska kafa i pažljivo odabrana ponuda pića.',
+
+        categories:{
+          hot:'Topli Napici',
+          soft:'Gazirana Pića',
+          beer:'Pive',
+          water:'Vode',
+          juice:'Cijeđeni Sokovi',
+          wine:'Vina'
+        },
+
+        products:{
+          espresso:'Klasična kafa',
+          cappuccino:'Sa mliječnom pjenom',
+          cola:'0.25l',
+          sprite:'0.25l',
+          heineken:'0.33l',
+          corona:'0.33l',
+          jana:'0.33l',
+          kiseljak:'0.25l',
+          orange:'Svježe cijeđeno',
+          lemonade:'Domaća limunada',
+          redwine:'Čaša',
+          whitewine:'Čaša'
+        }
+      },
+
+      en:{
+        welcome:'Welcome',
+        subtitle:'Choose your menu language and explore our drinks.',
+        about:'Modern atmosphere, premium coffee and carefully selected drinks.',
+
+        categories:{
+          hot:'Hot Drinks',
+          soft:'Soft Drinks',
+          beer:'Beer',
+          water:'Water',
+          juice:'Fresh Juices',
+          wine:'Wine'
+        },
+
+        products:{
+          espresso:'Classic coffee',
+          cappuccino:'With milk foam',
+          cola:'0.25l',
+          sprite:'0.25l',
+          heineken:'0.33l',
+          corona:'0.33l',
+          jana:'0.33l',
+          kiseljak:'0.25l',
+          orange:'Freshly squeezed',
+          lemonade:'Homemade lemonade',
+          redwine:'Glass',
+          whitewine:'Glass'
+        }
+      },
+
+      de:{
+        welcome:'Willkommen',
+        subtitle:'Wählen Sie Ihre Sprache und entdecken Sie unser Angebot.',
+        about:'Modernes Ambiente, hochwertiger Kaffee und ausgewählte Getränke.',
+
+        categories:{
+          hot:'Heißgetränke',
+          soft:'Erfrischungsgetränke',
+          beer:'Biere',
+          water:'Wasser',
+          juice:'Frische Säfte',
+          wine:'Wein'
+        },
+
+        products:{
+          espresso:'Klassischer Kaffee',
+          cappuccino:'Mit Milchschaum',
+          cola:'0.25l',
+          sprite:'0.25l',
+          heineken:'0.33l',
+          corona:'0.33l',
+          jana:'0.33l',
+          kiseljak:'0.25l',
+          orange:'Frisch gepresst',
+          lemonade:'Hausgemachte Limonade',
+          redwine:'Glas',
+          whitewine:'Glas'
+        }
+      }
+
+    };
+
+    function openMenu(language){
+
+      const t = translations[language];
+
+      document.getElementById('mainTitle').innerText = t.welcome;
+      document.getElementById('mainSubtitle').innerText = t.subtitle;
+      document.getElementById('aboutText').innerText = t.about;
+
+      document.getElementById('catHot').innerText = t.categories.hot;
+      document.getElementById('catSoft').innerText = t.categories.soft;
+      document.getElementById('catBeer').innerText = t.categories.beer;
+      document.getElementById('catWater').innerText = t.categories.water;
+      document.getElementById('catJuice').innerText = t.categories.juice;
+      document.getElementById('catWine').innerText = t.categories.wine;
+
+      document.getElementById('espressoDesc').innerText = t.products.espresso;
+      document.getElementById('cappuccinoDesc').innerText = t.products.cappuccino;
+      document.getElementById('colaDesc').innerText = t.products.cola;
+      document.getElementById('spriteDesc').innerText = t.products.sprite;
+      document.getElementById('heinekenDesc').innerText = t.products.heineken;
+      document.getElementById('coronaDesc').innerText = t.products.corona;
+      document.getElementById('janaDesc').innerText = t.products.jana;
+      document.getElementById('kiseljakDesc').innerText = t.products.kiseljak;
+      document.getElementById('orangeDesc').innerText = t.products.orange;
+      document.getElementById('lemonadeDesc').innerText = t.products.lemonade;
+      document.getElementById('redwineDesc').innerText = t.products.redwine;
+      document.getElementById('whitewineDesc').innerText = t.products.whitewine;
+
+      welcomeScreen.style.display = 'none';
+      menuScreen.style.display = 'block';
+
+      window.scrollTo({top:0,behavior:'smooth'});
+
+    }
+
+    function goHome(){
+
+      menuScreen.style.display = 'none';
+      welcomeScreen.style.display = 'flex';
+
+      window.scrollTo({top:0,behavior:'smooth'});
+
+    }
+
+    function toggleCategory(element){
+
+      const category = element.parentElement;
+      const content = category.querySelector('.category-content');
+
+      category.classList.toggle('active');
+
+      if(category.classList.contains('active')){
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+      else{
+        content.style.maxHeight = '0px';
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
