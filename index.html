@@ -9,1317 +9,359 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
-    body{
-      font-family:'Poppins',sans-serif;
-      background:#070707;
-      color:white;
-      overflow-x:hidden;
-      min-height:100vh;
-    }
-
-    body::before{
-      content:"";
-      position:fixed;
-      width:500px;
-      height:500px;
-      background:#ff6a00;
-      filter:blur(170px);
-      top:-250px;
-      right:-120px;
-      opacity:0.25;
-      z-index:-1;
-    }
-
-    body::after{
-      content:"";
-      position:fixed;
-      width:450px;
-      height:450px;
-      background:#0059ff;
-      filter:blur(170px);
-      bottom:-250px;
-      left:-120px;
-      opacity:0.18;
-      z-index:-1;
-    }
-
-    .welcome-screen{
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:25px;
-    }
-
-    .welcome-box{
-      width:100%;
-      max-width:430px;
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.08);
-      backdrop-filter:blur(25px);
-      border-radius:35px;
-      padding:50px 35px;
-      text-align:center;
-      box-shadow:0 25px 60px rgba(0,0,0,0.5);
-      animation:fadeUp 1s ease;
-    }
-
-    .logo{
-      width:130px;
-      height:130px;
-      border-radius:50%;
-      object-fit:cover;
-      margin-bottom:25px;
-      border:4px solid rgba(255,255,255,0.1);
-      box-shadow:0 10px 35px rgba(255,106,0,0.35);
-    }
-
-    h1{
-      font-size:42px;
-      margin-bottom:10px;
-      font-weight:700;
-    }
-
-    .subtitle{
-      color:#b8b8b8;
-      margin-bottom:30px;
-      line-height:1.7;
-    }
-
-    /* FLAGS */
-    .flags{
-      display:flex;
-      justify-content:center;
-      gap:18px;
-      margin-bottom:35px;
-    }
-
-    .flag-btn{
-      width:65px;
-      height:65px;
-      border-radius:50%;
-      border:2px solid rgba(255,255,255,0.15);
-      overflow:hidden;
-      cursor:pointer;
-      transition:0.3s;
-      box-shadow:0 10px 25px rgba(0,0,0,0.4);
-    }
-
-    .flag-btn.selected {
-      border-color: #ff7a00;
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(255, 122, 0, 0.6);
-    }
-
-    .flag-btn img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .flag-btn:hover{
-      transform:translateY(-4px) scale(1.05);
-      border-color:#ff7a00;
-    }
-
-    /* NEXT BUTTON */
-    .next-btn {
-      width: 100%;
-      padding: 16px;
-      border-radius: 20px;
-      border: none;
-      font-family: 'Poppins', sans-serif;
-      font-size: 18px;
-      font-weight: 600;
-      color: #ffffff;
-      background: #333333;
-      cursor: not-allowed;
-      transition: all 0.4s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    .next-btn.active {
-      background: linear-gradient(135deg, #ff7a00, #ff5100);
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(255, 122, 0, 0.4);
-      animation: pulseGlow 2s infinite;
-    }
-
-    .next-btn.active:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(255, 122, 0, 0.6);
-    }
-
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 10px 25px rgba(255, 122, 0, 0.4); }
-      50% { box-shadow: 0 10px 35px rgba(255, 122, 0, 0.7); }
-      100% { box-shadow: 0 10px 25px rgba(255, 122, 0, 0.4); }
-    }
-
-    .menu-screen{
-      display:none;
-      max-width:900px;
-      margin:auto;
-      padding:25px;
-      padding-bottom: 140px; /* prostor za nazad na vrh i happy hour */
-    }
-
-    .hero{
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:35px;
-      padding:30px;
-      margin-bottom:30px;
-      backdrop-filter:blur(25px);
-      box-shadow:0 20px 50px rgba(0,0,0,0.4);
-      animation:fadeUp 1s ease;
-    }
-
-    .header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      margin-bottom: 18px;
-    }
-
-    .hero-logo{
-      width:90px;
-      height:90px;
-      border-radius:50%;
-      object-fit:cover;
-    }
-
-    .hero h2{
-      font-size:36px;
-      margin-bottom:10px;
-    }
-
-    .hero p{
-      color:#b9b9b9;
-      line-height:1.7;
-    }
-
-    .info-details {
-      margin-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding-top: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #d1d1d1;
-      font-size: 14px;
-    }
-
-    .info-icon {
-      font-size: 18px;
-      color: #ff7a00;
-    }
-
-    .top-actions{
-      display:flex;
-      gap: 10px;
-    }
-
-    /* SIVI KVADRATIĆI ZA GORNJE DUGMADI */
-    .language-switch, .wifi-btn{
-      width:55px;
-      height:55px;
-      border:none;
-      border-radius:18px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color:white;
-      font-size:22px;
-      cursor:pointer;
-      transition:0.3s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .language-switch:hover, .wifi-btn:hover{
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-3px);
-    }
-
-    /* FLOATING BUTTON (POLOVIČNO VIRI S DESNE STRANE) */
-    .floating-roll-btn {
-      position: fixed;
-      right: -20px;
-      top: 45%;
-      width: 65px;
-      height: 60px;
-      background: linear-gradient(135deg, #ff7a00, #ff5100);
-      border-radius: 20px 0 0 20px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-right: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 99;
-      display: none;
-      justify-content: flex-start;
-      align-items: center;
-      padding-left: 12px;
-      box-shadow: -5px 5px 20px rgba(255, 122, 0, 0.4);
-      transition: right 0.3s, transform 0.2s;
-    }
-
-    .floating-roll-btn:hover {
-      right: 0px;
-      transform: scale(1.05);
-    }
-
-    /* HAPPY HOUR BAR (SUSTAV NA DNUE) */
-    .happy-hour-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(20, 20, 20, 0.85);
-      backdrop-filter: blur(15px);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 12px 20px;
-      text-align: center;
-      z-index: 98;
-      display: none;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .happy-hour-bar.active-now {
-      background: rgba(255, 122, 0, 0.15);
-      border-top: 1px solid #ff7a00;
-      color: #ff9d42;
-    }
-
-    .happy-hour-bar .highlight {
-      font-weight: 700;
-      color: #fff;
-      background: #ff7a00;
-      padding: 2px 8px;
-      border-radius: 6px;
-      margin-left: 5px;
-      display: inline-block;
-    }
-
-    /* BACK TO TOP BUTTON */
-    .back-to-top {
-      position: fixed;
-      bottom: 60px; /* podignuto radi happy hour-a */
-      right: 25px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 99;
-      transition: 0.3s;
-    }
-
-    .back-to-top:hover {
-      background: #ff7a00;
-      border-color: #ff7a00;
-      transform: translateY(-3px);
-    }
-
-    /* MODAL OVERLAYS (WIFI I RULET) */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 20px;
-    }
-
-    .modal-box {
-      width: 100%;
-      max-width: 360px;
-      background: #121212;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 28px;
-      padding: 30px;
-      text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      animation: fadeUp 0.4s ease;
-    }
-
-    .modal-box h3 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .wifi-info-field {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 12px;
-      border-radius: 14px;
-      margin-bottom: 15px;
-      text-align: left;
-    }
-
-    .wifi-info-field span {
-      font-size: 12px;
-      color: #888;
-      display: block;
-    }
-
-    .wifi-info-field strong {
-      font-size: 16px;
-      color: #fff;
-      word-break: break-all;
-    }
-
-    .copy-btn, .roll-action-btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #ff7a00, #ff5100);
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-      margin-bottom: 15px;
-      transition: 0.2s;
-    }
-
-    .copy-btn {
-      background: #333;
-    }
-    .copy-btn:hover { background: #444; }
-
-    .roulette-display {
-      background: rgba(255, 255, 255, 0.04);
-      border: 2px dashed rgba(255, 122, 0, 0.4);
-      padding: 25px 15px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      min-height: 110px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .roulette-display h4 {
-      font-size: 20px;
-      color: #ff7a00;
-      margin-bottom: 5px;
-    }
-
-    .roulette-display p {
-      font-size: 14px;
-      color: #aaa;
-    }
-
-    .close-modal {
-      color: #aaa;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    .socials{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:25px;
-    }
-
-    .socials a{
-      width:58px;
-      height:58px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      color:white;
-      background:rgba(255,255,255,0.07);
-      border:1px solid rgba(255,255,255,0.06);
-      padding:12px 18px;
-      border-radius:15px;
-      transition:0.3s;
-    }
-
-    .socials img{
-      width:28px;
-      height:28px;
-      object-fit:contain;
-    }
-
-    .socials a:hover{
-      background:#ff7a00;
-      transform:translateY(-3px);
-    }
-
-    .category{
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:28px;
-      overflow:hidden;
-      margin-bottom:18px;
-      backdrop-filter:blur(25px);
-      box-shadow:0 10px 30px rgba(0,0,0,0.25);
-      animation:fadeUp 1s ease;
-    }
-
-    .category-header{
-      padding:24px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      cursor:pointer;
-      transition:0.3s;
-    }
-
-    .category-header:hover{
-      background:rgba(255,255,255,0.03);
-    }
-
-    .category-left{
-      display:flex;
-      align-items:center;
-      gap:18px;
-    }
-
-    .icon{
-      width:58px;
-      height:58px;
-      border-radius:18px;
-      background:linear-gradient(135deg,#ff7a00,#ff5100);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      font-size:24px;
-      box-shadow:0 10px 25px rgba(255,122,0,0.3);
-    }
-
-    .category-name{
-      font-size:21px;
-      font-weight:600;
-    }
-
-    .plus{
-      font-size:34px;
-      color:#ff7a00;
-      transition:0.35s;
-    }
-
-    .category.active .plus{
-      transform:rotate(45deg);
-    }
-
-    .category-content{
-      max-height:0;
-      overflow:hidden;
-      transition:max-height 0.45s ease;
-    }
-
-    .item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 24px;
-      border-top:1px solid rgba(255,255,255,0.06);
-      transition:0.3s;
-    }
-
-    .item:hover{
-      background:rgba(255,255,255,0.03);
-    }
-
-    .item h4{
-      font-size:18px;
-      margin-bottom:5px;
-    }
-
-    .item p{
-      color:#a6a6a6;
-      font-size:14px;
-    }
-
-    .price{
-      font-size:18px;
-      font-weight:700;
-      color:#ff7a00;
-      white-space: nowrap;
-    }
-
-    @keyframes fadeUp{
-      from{opacity:0;transform:translateY(40px);}
-      to{opacity:1;transform:translateY(0);}
-    }
-
-    @media(max-width:700px){
-      h1{font-size:34px;}
-      .hero h2{font-size:30px;}
-      .item{flex-direction:column;align-items:flex-start;gap:12px;}
-      .category-name{font-size:18px;}
-      .icon{width:52px;height:52px;}
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- POČETNI EKRAN -->
-<section class="welcome-screen" id="welcomeScreen">
-  <div class="welcome-box">
-    <img src="logo.png" class="logo">
+  <div id="fallingBtnContainer"></div>
 
-    <h1 id="mainTitle">Dobrodošli</h1>
+  <section class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-box">
+      <img src="logo.png" class="logo">
 
-    <p class="subtitle" id="mainSubtitle">
-      Odaberite jezik menija i istražite našu ponudu pića.
-    </p>
+      <h1 id="mainTitle">Dobrodošli</h1>
 
-    <div class="flags">
-      <div class="flag-btn" id="flag-bs" onclick="selectLanguage('bs')">
-        <img src="ba.png" alt="Bosanski">
+      <p class="subtitle" id="mainSubtitle">
+        Odaberite jezik menija i istražite našu ponudu pića.
+      </p>
+
+      <div class="flags">
+        <div class="flag-btn" id="flag-bs" onclick="selectLanguage('bs')">
+          <img src="ba.png" alt="Bosanski">
+        </div>
+        <div class="flag-btn" id="flag-en" onclick="selectLanguage('en')">
+          <img src="en.png" alt="English">
+        </div>
+        <div class="flag-btn" id="flag-de" onclick="selectLanguage('de')">
+          <img src="de.png" alt="Deutsch">
+        </div>
       </div>
-      <div class="flag-btn" id="flag-en" onclick="selectLanguage('en')">
-        <img src="en.png" alt="English">
+
+      <button class="next-btn" id="nextBtn" disabled onclick="navigateToMenu()">Dalje</button>
+    </div>
+  </section>
+
+  <section class="menu-screen" id="menuScreen">
+    <div class="hero">
+      <div class="header-container">
+        <img src="logo.png" class="hero-logo">
+        <div class="top-actions">
+          <button onclick="openWifiModal()" class="wifi-btn">🛜</button>
+          <button onclick="goHome()" class="language-switch">🏠</button>
+        </div>
       </div>
-      <div class="flag-btn" id="flag-de" onclick="selectLanguage('de')">
-        <img src="de.png" alt="Deutsch">
+
+      <h2>Caffe Bar Digili</h2>
+
+      <div class="info-details">
+        <div class="info-item">
+          <span class="info-icon">📍</span>
+          <span id="infoAddress">Maršala Tita 12, Sarajevo</span>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">🕒</span>
+          <span id="infoHours">Pon - Ned: 07:00 - 23:00</span>
+        </div>
+      </div>
+
+      <div class="socials">
+        <a href="https://www.instagram.com/digilibih/"><img src="instagram.png"></a>
+        <a href="https://www.facebook.com/"><img src="facebook.png"></a>
+        <a href="https://www.tiktok.com/"><img src="tiktok.png"></a>
+        <a href="https://www.google.com/maps"><img src="location.png"></a>
       </div>
     </div>
 
-    <button class="next-btn" id="nextBtn" disabled onclick="navigateToMenu()">Dalje</button>
+    <div class="category scroll-reveal" id="catHotContainer">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon">☕</div>
+          <div>
+            <div class="category-name" id="catHot">Topli Napici <span class="hh-badge" id="hhBadge">AKCIJA</span></div>
+            <div class="category-timer" id="hotDrinksTimer"></div>
+          </div>
+        </div>
+        <div class="plus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemEspresso">Espresso</h4>
+            <p id="descEspresso">Klasična kafa</p>
+          </div>
+          <div class="price" id="priceEspresso">2.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemMacchiato">Makiato</h4>
+            <p id="descMacchiato">Espresso sa malo mliječne pjene</p>
+          </div>
+          <div class="price" id="priceMacchiato">3.00 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemCappuccino">Cappuccino</h4>
+            <p id="descCappuccino">Sa mliječnom pjenom</p>
+          </div>
+          <div class="price" id="priceCappuccino">3.50 KM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category scroll-reveal">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon">🥤</div>
+          <div class="category-name" id="catSoda">Gazirana pića</div>
+        </div>
+        <div class="plus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemCola">Coca-Cola</h4>
+            <p id="descCola">Osvježavajuće gazirano piće</p>
+          </div>
+          <div class="price">3.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemFanta">Fanta</h4>
+            <p id="descFanta">Sa ukusom narandže</p>
+          </div>
+          <div class="price">3.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemSprite">Sprite</h4>
+            <p id="descSprite">Osvježavajući limun-limeta ukus</p>
+          </div>
+          <div class="price">3.50 KM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category scroll-reveal">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon">🍊</div>
+          <div class="category-name" id="catJuice">Cijeđeni sokovi</div>
+        </div>
+        <div class="plus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemOrange">Cijeđena narandža</h4>
+            <p id="descOrange">100% prirodni sok od narandže</p>
+          </div>
+          <div class="price">5.00 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemLemonade">Limunada</h4>
+            <p id="descLemonade">Svježe cijeđeni limun</p>
+          </div>
+          <div class="price">4.00 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemMixJuice">Mix Meni</h4>
+            <p id="descMixJuice">Narandža, limun, grejp i med</p>
+          </div>
+          <div class="price">6.00 KM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category scroll-reveal">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon">💧</div>
+          <div class="category-name" id="catWater">Vode</div>
+        </div>
+        <div class="plus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemWaterStill">Negazirana voda</h4>
+            <p id="descWaterStill">Prirodna izvorska voda 0.33l</p>
+          </div>
+          <div class="price">2.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemWaterSpark">Gazirana voda</h4>
+            <p id="descWaterSpark">Mineralna gazirana voda 0.33l</p>
+          </div>
+          <div class="price">2.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemWaterFlav">Voda sa okusom</h4>
+            <p id="descWaterFlav">Lagani voćni okus</p>
+          </div>
+          <div class="price">3.00 KM</div>
+        </div>
+      </div>
+    </div>
+
+<div class="category scroll-reveal" id="catDessertContainer">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon" id="dessertIcon">🍰</div>
+          <div>
+            <div class="category-name" id="catDessert">Deserti <span class="hh-badge" id="luckyBadge" style="background:#b026ff; display: none;">SRETNI POPUST</span></div>
+            <div class="category-timer" id="dessertTimer"></div>
+          </div>
+        </div>
+        <div class="plus" id="dessertPlus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemChoco">Čokoladni kolač</h4>
+            <p id="descChoco">Bogati kolač sa belgijskom čokoladom</p>
+          </div>
+          <div class="price" id="priceChoco">6.00 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemCheese">Cheesecake</h4>
+            <p id="descCheese">Lagani kolač sa sirom i šumskim voćem</p>
+          </div>
+          <div class="price" id="priceCheese">5.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemPancakes">Palačinke</h4>
+            <p id="descPancakes">Sa Nutellom ili marmeladom</p>
+          </div>
+          <div class="price" id="pricePancakes">5.00 KM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category scroll-reveal">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon">🍺</div>
+          <div class="category-name" id="catBeer">Pive</div>
+        </div>
+        <div class="plus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemBeerLocal">Domaće pivo</h4>
+            <p id="descBeerLocal">Svijetlo pivo, točeno ili flaširano 0.33l</p>
+          </div>
+          <div class="price">3.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemBeerPrem">Premium Lager</h4>
+            <p id="descBeerPrem">Vrhunsko uvozno pivo 0.33l</p>
+          </div>
+          <div class="price">4.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemBeerDark">Tamno pivo</h4>
+            <p id="descBeerDark">Bogati okus prženog slada 0.33l</p>
+          </div>
+          <div class="price">4.00 KM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category scroll-reveal">
+      <div class="category-header" onclick="toggleCategory(this)">
+        <div class="category-left">
+          <div class="icon">🍷</div>
+          <div class="category-name" id="catWine">Vina</div>
+        </div>
+        <div class="plus">+</div>
+      </div>
+      <div class="category-content">
+        <div class="item">
+          <div>
+            <h4 id="itemWineWhite">Bijelo vino</h4>
+            <p id="descWineWhite">Vrhunsko suho bijelo vino 0.187l</p>
+          </div>
+          <div class="price">6.00 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemWineRed">Crveno vino</h4>
+            <p id="descWineRed">Kvalitetno crno/crveno vino 0.187l</p>
+          </div>
+          <div class="price">6.50 KM</div>
+        </div>
+        <div class="item">
+          <div>
+            <h4 id="itemWineRose">Rose vino</h4>
+            <p id="descWineRose">Osvježavajuće i lagano rose vino 0.187l</p>
+          </div>
+          <div class="price">6.00 KM</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <button class="floating-roll-btn" id="floatingRollBtn" onclick="openRouletteModal()">🎲</button>
+
+  <div class="happy-hour-bar" id="happyHourBar">
+    <span id="happyHourText">Happy Hour: ...</span>
   </div>
-</section>
 
-<!-- GLAVNI MENI -->
-<section class="menu-screen" id="menuScreen">
-  <div class="hero">
-    <div class="header-container">
-      <img src="logo.png" class="hero-logo">
-      <div class="top-actions">
-        <button onclick="openWifiModal()" class="wifi-btn">🛜</button>
-        <button onclick="goHome()" class="language-switch">🏠</button>
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()">▲</button>
+
+  <div class="modal-overlay" id="wifiModal">
+    <div class="modal-box">
+      <h3 id="popTitle">🛜 Wi-Fi Informacije</h3>
+      <div class="wifi-info-field">
+        <span id="popNetName">Naziv mreže:</span>
+        <strong>Digili_Guest_WiFi</strong>
       </div>
-    </div>
-
-    <h2>Caffe Bar Digili</h2>
-
-    <p id="aboutText">
-      Moderan ambijent, vrhunska kafa i pažljivo odabrana ponuda pića.
-    </p>
-
-    <div class="info-details">
-      <div class="info-item">
-        <span class="info-icon">📍</span>
-        <span id="infoAddress">Adresa: Maršala Tita 12, Sarajevo</span>
+      <div class="wifi-info-field">
+        <span id="popPassName">Lozinka:</span>
+        <strong id="wifiPassword">digili2026</strong>
       </div>
-      <div class="info-item">
-        <span class="info-icon">🕒</span>
-        <span id="infoHours">Radno vrijeme: Pon - Ned: 07:00 - 23:00</span>
-      </div>
-    </div>
-
-    <div class="socials">
-      <a href="https://www.instagram.com/digilibih/"><img src="instagram.png"></a>
-      <a href="https://www.facebook.com/"><img src="facebook.png"></a>
-      <a href="https://www.tiktok.com/"><img src="tiktok.png"></a>
-      <a href="https://www.google.com/maps"><img src="location.png"></a>
+      <button class="copy-btn" id="popCopyBtn" onclick="copyWifiPassword()">Kopiraj šifru</button>
+      <br>
+      <span class="close-modal" id="popClose" onclick="closeWifiModal()">Zatvori</span>
     </div>
   </div>
 
-  <!-- 1. TOPLI NAPICI -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">☕</div>
-        <div class="category-name" id="catHot">Topli Napici</div>
+  <div class="modal-overlay" id="rouletteModal">
+    <div class="modal-box">
+      <h3 id="rouletteTitle">🎲 Izaberi za mene</h3>
+      <p style="color:#aaa; font-size:13px; margin-bottom:15px;" id="rouletteSub">Ne znate šta naručiti? Prepustite odluku našem ruletu sreće!</p>
+      <div class="roulette-display">
+        <h4 id="rouletteResultName">???</h4>
+        <p id="rouletteResultPrice">-</p>
       </div>
-      <div class="plus">+</div>
+      <button class="roll-action-btn" id="rollActionBtn" onclick="spinRoulette()">Pokreni rulet</button>
+      <br>
+      <span class="close-modal" id="rouletteClose" onclick="closeRouletteModal()">Zatvori</span>
     </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemEspresso">Espresso</h4>
-          <p id="descEspresso">Klasična kafa</p>
-        </div>
-        <div class="price">2.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemMacchiato">Makiato</h4>
-          <p id="descMacchiato">Espresso sa malo mliječne pjene</p>
-        </div>
-        <div class="price">3.00 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemCappuccino">Cappuccino</h4>
-          <p id="descCappuccino">Sa mliječnom pjenom</p>
-        </div>
-        <div class="price">3.50 KM</div>
+  </div>
+
+  <div class="modal-overlay" id="luckyModal">
+    <div class="modal-box" style="border-color: #b026ff;">
+      <h3 style="color: #b026ff; font-size: 24px; margin-bottom: 10px;" id="luckyTitle">🎉 Čestitamo!</h3>
+      <p style="line-height: 1.6; font-size: 15px; margin-bottom: 25px;" id="luckyMessage">
+        Ulovili ste skrivenu nagradu! Osvojili ste **20% popusta** na bilo koji desert sa menija. Imate 5 minuta da prihvatite i iskoristite ponudu!
+      </p>
+      <div style="display: flex; gap: 12px;">
+        <button class="roll-action-btn" style="background: linear-gradient(135deg, #b026ff, #7a00cc); margin-bottom: 0;" id="luckyAcceptBtn" onclick="acceptLuckyDiscount()">Prihvati</button>
+        <button class="roll-action-btn" style="background: #222; border: 1px solid #444; color: #aaa; margin-bottom: 0;" id="luckyDeclineBtn" onclick="declineLuckyDiscount()">Odbij</button>
       </div>
     </div>
   </div>
 
-  <!-- 2. GAZIRANA PICA -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">🥤</div>
-        <div class="category-name" id="catSoda">Gazirana pića</div>
-      </div>
-      <div class="plus">+</div>
-    </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemCola">Coca-Cola</h4>
-          <p id="descCola">Osvježavajuće gazirano piće</p>
-        </div>
-        <div class="price">3.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemFanta">Fanta</h4>
-          <p id="descFanta">Sa ukusom narandže</p>
-        </div>
-        <div class="price">3.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemSprite">Sprite</h4>
-          <p id="descSprite">Osvježavajući limun-limeta ukus</p>
-        </div>
-        <div class="price">3.50 KM</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. CIJEDJENI SOKOVI -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">🍊</div>
-        <div class="category-name" id="catJuice">Cijeđeni sokovi</div>
-      </div>
-      <div class="plus">+</div>
-    </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemOrange">Cijeđena narandža</h4>
-          <p id="descOrange">100% prirodni sok od narandže</p>
-        </div>
-        <div class="price">5.00 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemLemonade">Limunada</h4>
-          <p id="descLemonade">Svježe cijeđeni limun</p>
-        </div>
-        <div class="price">4.00 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemMixJuice">Mix Meni</h4>
-          <p id="descMixJuice">Narandža, limun, grejp i med</p>
-        </div>
-        <div class="price">6.00 KM</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. VODE -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">💧</div>
-        <div class="category-name" id="catWater">Vode</div>
-      </div>
-      <div class="plus">+</div>
-    </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemWaterStill">Negazirana voda</h4>
-          <p id="descWaterStill">Prirodna izvorska voda 0.33l</p>
-        </div>
-        <div class="price">2.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemWaterSpark">Gazirana voda</h4>
-          <p id="descWaterSpark">Mineralna gazirana voda 0.33l</p>
-        </div>
-        <div class="price">2.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemWaterFlav">Voda sa okusom</h4>
-          <p id="descWaterFlav">Lagani voćni okus</p>
-        </div>
-        <div class="price">3.00 KM</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. DESERTI -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">🍰</div>
-        <div class="category-name" id="catDessert">Deserti</div>
-      </div>
-      <div class="plus">+</div>
-    </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemChoco">Čokoladni kolač</h4>
-          <p id="descChoco">Bogati kolač sa belgijskom čokoladom</p>
-        </div>
-        <div class="price">6.00 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemCheese">Cheesecake</h4>
-          <p id="descCheese">Lagani kolač sa sirom i šumskim voćem</p>
-        </div>
-        <div class="price">5.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemPancakes">Palačinke</h4>
-          <p id="descPancakes">Sa Nutellom ili marmeladom</p>
-        </div>
-        <div class="price">5.00 KM</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. PIVE -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">🍺</div>
-        <div class="category-name" id="catBeer">Pive</div>
-      </div>
-      <div class="plus">+</div>
-    </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemBeerLocal">Domaće pivo</h4>
-          <p id="descBeerLocal">Svijetlo pivo, točeno ili flaširano 0.33l</p>
-        </div>
-        <div class="price">3.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemBeerPrem">Premium Lager</h4>
-          <p id="descBeerPrem">Vrhunsko uvozno pivo 0.33l</p>
-        </div>
-        <div class="price">4.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemBeerDark">Tamno pivo</h4>
-          <p id="descBeerDark">Bogati okus prženog slada 0.33l</p>
-        </div>
-        <div class="price">4.00 KM</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 7. VINA -->
-  <div class="category">
-    <div class="category-header" onclick="toggleCategory(this)">
-      <div class="category-left">
-        <div class="icon">🍷</div>
-        <div class="category-name" id="catWine">Vina</div>
-      </div>
-      <div class="plus">+</div>
-    </div>
-    <div class="category-content">
-      <div class="item">
-        <div>
-          <h4 id="itemWineWhite">Bijelo vino</h4>
-          <p id="descWineWhite">Vrhunsko suho bijelo vino 0.187l</p>
-        </div>
-        <div class="price">6.00 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemWineRed">Crveno vino</h4>
-          <p id="descWineRed">Kvalitetno crno/crveno vino 0.187l</p>
-        </div>
-        <div class="price">6.50 KM</div>
-      </div>
-      <div class="item">
-        <div>
-          <h4 id="itemWineRose">Rose vino</h4>
-          <p id="descWineRose">Osvježavajuće i lagano rose vino 0.187l</p>
-        </div>
-        <div class="price">6.00 KM</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FLOATING DUGME ZA RULET (POLOVIČNO VIRI) -->
-<button class="floating-roll-btn" id="floatingRollBtn" onclick="openRouletteModal()">🎲</button>
-
-<!-- SVIJETLI PROZOR HAPPY HOUR AKCIJE NA DNUE -->
-<div class="happy-hour-bar" id="happyHourBar">
-  <span id="happyHourText">Happy Hour: ...</span>
-</div>
-
-<!-- DUGME NAZAD NA VRH -->
-<button class="back-to-top" id="backToTop" onclick="scrollToTop()">▲</button>
-
-<!-- WI-FI PROZOR (MODAL) -->
-<div class="modal-overlay" id="wifiModal">
-  <div class="modal-box">
-    <h3 id="popTitle">🛜 Wi-Fi Informacije</h3>
-    <div class="wifi-info-field">
-      <span id="popNetName">Naziv mreže:</span>
-      <strong>Digili_Guest_WiFi</strong>
-    </div>
-    <div class="wifi-info-field">
-      <span id="popPassName">Lozinka:</span>
-      <strong id="wifiPassword">digili2026</strong>
-    </div>
-    <button class="copy-btn" id="popCopyBtn" onclick="copyWifiPassword()">Kopiraj šifru</button>
-    <br>
-    <span class="close-modal" id="popClose" onclick="closeWifiModal()">Zatvori</span>
-  </div>
-</div>
-
-<!-- RULET / IZABERI ZA MENE MODAL -->
-<div class="modal-overlay" id="rouletteModal">
-  <div class="modal-box">
-    <h3 id="rouletteTitle">🎲 Izaberi za mene</h3>
-    <p style="color:#aaa; font-size:13px; margin-bottom:15px;" id="rouletteSub">Ne znate šta naručiti? Prepustite odluku našem ruletu sreće!</p>
-    
-    <div class="roulette-display">
-      <h4 id="rouletteResultName">???</h4>
-      <p id="rouletteResultPrice">-</p>
-    </div>
-
-    <button class="roll-action-btn" id="rollActionBtn" onclick="spinRoulette()">Pokreni rulet</button>
-    <br>
-    <span class="close-modal" id="rouletteClose" onclick="closeRouletteModal()">Zatvori</span>
-  </div>
-</div>
-
-<script>
-const welcomeScreen = document.getElementById('welcomeScreen');
-const menuScreen = document.getElementById('menuScreen');
-const nextBtn = document.getElementById('nextBtn');
-const backToTopBtn = document.getElementById('backToTop');
-const wifiModal = document.getElementById('wifiModal');
-const rouletteModal = document.getElementById('rouletteModal');
-const floatingRollBtn = document.getElementById('floatingRollBtn');
-const happyHourBar = document.getElementById('happyHourBar');
-
-let selectedLang = '';
-let happyHourInterval = null;
-
-const translations = {
-  bs: {
-    welcome: 'Dobrodošli',
-    subtitle: 'Odaberite jezik menija i istražite našu ponudu pića.',
-    nextBtnText: 'Dalje',
-    about: 'Moderan ambijent, vrhunska kafa i pažljivo odabrana ponuda pića.',
-    addressText: 'Adresa: Maršala Tita 12, Sarajevo',
-    hoursText: 'Radno vrijeme: Pon - Ned: 07:00 - 23:00',
-    wifiTitle: '🛜 Wi-Fi Informacije',
-    wifiNet: 'Naziv mreže:',
-    wifiPass: 'Lozinka:',
-    wifiCopy: 'Kopiraj šifru',
-    wifiCopied: 'Kopirano!',
-    wifiClose: 'Zatvori',
-    rouletteTitle: '🎲 Izaberi za mene',
-    rouletteSub: 'Ne znate šta naručiti? Prepustite odluku našem ruletu sreće!',
-    rouletteBtn: 'Pokreni rulet',
-    rouletteRolling: 'Biram...',
-    hhActive: '🔥 HAPPY HOUR JE U TOKU! SVI TOPLI NAPICI 2KM! Ističe za:',
-    hhSoon: '🕒 Happy Hour počinje za:',
-    categories: {
-      hot: 'Topli Napici', soda: 'Gazirana pića', juice: 'Cijeđeni sokovi',
-      water: 'Vode', dessert: 'Deserti', beer: 'Pive', wine: 'Vina'
-    },
-    items: {
-      espresso: 'Espresso', descEspresso: 'Klasična kafa',
-      macchiato: 'Makiato', descMacchiato: 'Espresso sa malo mliječne pjene',
-      cappuccino: 'Cappuccino', descCappuccino: 'Sa mliječnom pjenom',
-      cola: 'Coca-Cola', descCola: 'Osvježavajuće gazirano piće',
-      fanta: 'Fanta', descFanta: 'Sa ukusom narandže',
-      sprite: 'Sprite', descSprite: 'Osvježavajući limun-limeta ukus',
-      orange: 'Cijeđena narandža', descOrange: '100% prirodni sok od narandže',
-      lemonade: 'Limunada', descLemonade: 'Svježe cijeđeni limun',
-      mixJuice: 'Mix Meni', descMixJuice: 'Narandža, limun, grejp i med',
-      waterStill: 'Negazirana voda', descWaterStill: 'Prirodna izvorska voda 0.33l',
-      waterSpark: 'Gazirana voda', descWaterSpark: 'Mineralna gazirana voda 0.33l',
-      waterFlav: 'Voda sa okusom', descWaterFlav: 'Lagani voćni okus',
-      choco: 'Čokoladni kolač', descChoco: 'Bogati kolač sa belgijskom čokoladom',
-      cheese: 'Cheesecake', descCheese: 'Lagani kolač sa sirom i šumskim voćem',
-      pancakes: 'Palačinke', descPancakes: 'Sa Nutellom ili marmeladom',
-      beerLocal: 'Domaće pivo', descBeerLocal: 'Svijetlo pivo, točeno ili flaširano 0.33l',
-      beerPrem: 'Premium Lager', descBeerPrem: 'Vrhunsko uvozno pivo 0.33l',
-      beerDark: 'Tamno pivo', descBeerDark: 'Bogati okus prženog slada 0.33l',
-      wineWhite: 'Bijelo vino', descWineWhite: 'Vrhunsko suho bijelo vino 0.187l',
-      wineRed: 'Crveno vino', descWineRed: 'Kvalitetno crno/crveno vino 0.187l',
-      wineRose: 'Rose vino', descWineRose: 'Osvježavajuće i lagano rose vino 0.187l'
-    }
-  },
-  en: {
-    welcome: 'Welcome',
-    subtitle: 'Choose your menu language and explore our drinks.',
-    nextBtnText: 'Next',
-    about: 'Modern atmosphere, premium coffee and carefully selected drinks.',
-    addressText: 'Address: Marsala Tita 12, Sarajevo',
-    hoursText: 'Opening Hours: Mon - Sun: 07:00 - 23:00',
-    wifiTitle: '🛜 Wi-Fi Information',
-    wifiNet: 'Network Name:',
-    wifiPass: 'Password:',
-    wifiCopy: 'Copy Password',
-    wifiCopied: 'Copied!',
-    wifiClose: 'Close',
-    rouletteTitle: '🎲 Choose for Me',
-    rouletteSub: "Don't know what to order? Let our roulette wheel decide!",
-    rouletteBtn: 'Spin Roulette',
-    rouletteRolling: 'Choosing...',
-    hhActive: '🔥 HAPPY HOUR IS LIVE! ALL HOT DRINKS 2KM! Expires in:',
-    hhSoon: '🕒 Happy Hour starts in:',
-    categories: {
-      hot: 'Hot Drinks', soda: 'Carbonated Drinks', juice: 'Fresh Juices',
-      water: 'Water', dessert: 'Desserts', beer: 'Beers', wine: 'Wines'
-    },
-    items: {
-      espresso: 'Espresso', descEspresso: 'Classic coffee',
-      macchiato: 'Macchiato', descMacchiato: 'Espresso with a bit of milk foam',
-      cappuccino: 'Cappuccino', descCappuccino: 'With milk foam',
-      cola: 'Coca-Cola', descCola: 'Refreshing carbonated drink',
-      fanta: 'Fanta', descFanta: 'Orange flavored',
-      sprite: 'Sprite', descSprite: 'Refreshing lemon-lime flavor',
-      orange: 'Fresh Orange Juice', descOrange: '100% natural orange juice',
-      lemonade: 'Lemonade', descLemonade: 'Freshly squeezed lemon',
-      mixJuice: 'Mix Menu', descMixJuice: 'Orange, lemon, grapefruit and honey',
-      waterStill: 'Still Water', descWaterStill: 'Natural spring water 0.33l',
-      waterSpark: 'Sparkling Water', descWaterSpark: 'Mineral sparkling water 0.33l',
-      waterFlav: 'Flavored Water', descWaterFlav: 'Light fruit flavor',
-      choco: 'Chocolate Cake', descChoco: 'Rich cake with Belgian chocolate',
-      cheese: 'Cheesecake', descCheese: 'Light cake with cheese and forest fruit',
-      pancakes: 'Pancakes', descPancakes: 'With Nutella or marmalade',
-      beerLocal: 'Local Beer', descBeerLocal: 'Light beer, draft or bottled 0.33l',
-      beerPrem: 'Premium Lager', descBeerPrem: 'Premium imported beer 0.33l',
-      beerDark: 'Dark Beer', descBeerDark: 'Rich roasted malt flavor 0.33l',
-      wineWhite: 'White Wine', descWineWhite: 'Premium dry white wine 0.187l',
-      wineRed: 'Red Wine', descWineRed: 'Quality red wine 0.187l',
-      wineRose: 'Rose Wine', descWineRose: 'Refreshing and light rose wine 0.187l'
-    }
-  },
-  de: {
-    welcome: 'Willkommen',
-    subtitle: 'Wählen Sie Ihre Sprache und entdecken Sie unser Angebot.',
-    nextBtnText: 'Weiter',
-    about: 'Modernes Ambiente, hochwertiger Kaffee und ausgewählte Getränke.',
-    addressText: 'Adresse: Marsala Tita 12, Sarajevo',
-    hoursText: 'Öffnungszeiten: Mo - So: 07:00 - 23:00',
-    wifiTitle: '🛜 Wi-Fi Informationen',
-    wifiNet: 'Netzwerkname:',
-    wifiPass: 'Passwort:',
-    wifiCopy: 'Passwort kopieren',
-    wifiCopied: 'Kopiert!',
-    wifiClose: 'Schließen',
-    rouletteTitle: '🎲 Wähle für mich',
-    rouletteSub: 'Wissen Sie nicht, was Sie bestellen sollen? Lassen Sie das Glücksrad entscheiden!',
-    rouletteBtn: 'Glücksrad drehen',
-    rouletteRolling: 'Wähle...',
-    hhActive: '🔥 HAPPY HOUR LÄUFT! ALLE HEISSGETRÄNKE 2KM! Endet in:',
-    hhSoon: '🕒 Happy Hour beginnt in:',
-    categories: {
-      hot: 'Heißgetränke', soda: 'Erfrischungsgetränke', juice: 'Frische Säfte',
-      water: 'Wasser', dessert: 'Desserts', beer: 'Biere', wine: 'Weine'
-    },
-    items: {
-      espresso: 'Espresso', descEspresso: 'Klassischer Kaffee',
-      macchiato: 'Macchiato', descMacchiato: 'Espresso mit etwas Milchschaum',
-      cappuccino: 'Cappuccino', descCappuccino: 'Mit Milchschaum',
-      cola: 'Coca-Cola', descCola: 'Erfrischendes kohlensäurehaltiges Getränk',
-      fanta: 'Fanta', descFanta: 'Mit Orangengeschmack',
-      sprite: 'Sprite', descSprite: 'Erfrischender Zitronen-Limetten-Geschmack',
-      orange: 'Frischer Orangensaft', descOrange: '100% natürlicher Orangensaft',
-      lemonade: 'Zitronenlimonade', descLemonade: 'Frisch gepresste Zitrone',
-      mixJuice: 'Mix Menü', descMixJuice: 'Orange, Zitrone, Grapefruit und Honig',
-      waterStill: 'Stilles Wasser', descWaterStill: 'Natürliches Quellwasser 0.33l',
-      waterSpark: 'Prickelndes Wasser', descWaterSpark: 'Mineralwasser mit Kohlensäure 0.33l',
-      waterFlav: 'Wasser mit Geschmack', descWaterFlav: 'Leichter Fruchtgeschmack',
-      choco: 'Schokoladenkuchen', descChoco: 'Reichhaltiger Kuchen mit belgischer Schokolade',
-      cheese: 'Cheesecake', descCheese: 'Leichter Kuchen mit Frischkäse und Waldbeeren',
-      pancakes: 'Pfannkuchen', descPancakes: 'Mit Nutella oder Marmelade',
-      beerLocal: 'Lokales Bier', descBeerLocal: 'Helles Bier, vom Fass oder aus der Flasche 0.33l',
-      beerPrem: 'Premium Lager', descBeerPrem: 'Erstklassiges Importbier 0.33l',
-      beerDark: 'Dunkelbier', descBeerDark: 'Reicher Geschmack von geröstetem Malz 0.33l',
-      wineWhite: 'Weißwein', descWineWhite: 'Premium trockener Weißwein 0.187l',
-      wineRed: 'Rotwein', descWineRed: 'Qualitätsrotwein 0.187l',
-      wineRose: 'Rosewein', descWineRose: 'Erfrischender und leichter Roséwein 0.187l'
-    }
-  }
-};
-
-function selectLanguage(lang) {
-  selectedLang = lang;
-  const t = translations[lang];
-
-  document.getElementById('mainTitle').innerText = t.welcome;
-  document.getElementById('mainSubtitle').innerText = t.subtitle;
-  nextBtn.innerText = t.nextBtnText;
-
-  document.querySelectorAll('.flag-btn').forEach(btn => btn.classList.remove('selected'));
-  document.getElementById(`flag-${lang}`).classList.add('selected');
-
-  nextBtn.removeAttribute('disabled');
-  nextBtn.classList.add('active');
-
-  applyMenuTranslations(t);
-}
-
-function applyMenuTranslations(t) {
-  document.getElementById('aboutText').innerText = t.about;
-  document.getElementById('infoAddress').innerText = t.addressText;
-  document.getElementById('infoHours').innerText = t.hoursText;
-
-  // Modali prevodi
-  document.getElementById('popTitle').innerText = t.wifiTitle;
-  document.getElementById('popNetName').innerText = t.wifiNet;
-  document.getElementById('popPassName').innerText = t.wifiPass;
-  document.getElementById('popCopyBtn').innerText = t.wifiCopy;
-  document.getElementById('popClose').innerText = t.wifiClose;
-
-  document.getElementById('rouletteTitle').innerText = t.rouletteTitle;
-  document.getElementById('rouletteSub').innerText = t.rouletteSub;
-  document.getElementById('rollActionBtn').innerText = t.rouletteBtn;
-  document.getElementById('rouletteClose').innerText = t.wifiClose;
-
-  // Kategorije
-  document.getElementById('catHot').innerText = t.categories.hot;
-  document.getElementById('catSoda').innerText = t.categories.soda;
-  document.getElementById('catJuice').innerText = t.categories.juice;
-  document.getElementById('catWater').innerText = t.categories.water;
-  document.getElementById('catDessert').innerText = t.categories.dessert;
-  document.getElementById('catBeer').innerText = t.categories.beer;
-  document.getElementById('catWine').innerText = t.categories.wine;
-
-  // Artikli
-  for (const key in t.items) {
-    const element = document.getElementById(key.startsWith('desc') ? key : 'item' + key.charAt(0).toUpperCase() + key.slice(1));
-    if (element) {
-      element.innerText = t.items[key];
-    }
-  }
-  updateHappyHourBar();
-}
-
-function navigateToMenu() {
-  if (!selectedLang) return;
-  welcomeScreen.style.display = 'none';
-  menuScreen.style.display = 'block';
-  floatingRollBtn.style.display = 'flex';
-  happyHourBar.style.display = 'block';
-  
-  // Pokreni timer za Happy hour
-  if(happyHourInterval) clearInterval(happyHourInterval);
-  happyHourInterval = setInterval(updateHappyHourBar, 60000); // osvježavaj svake minute
-  updateHappyHourBar();
-  
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function goHome(){
-  menuScreen.style.display = 'none';
-  floatingRollBtn.style.display = 'none';
-  happyHourBar.style.display = 'none';
-  welcomeScreen.style.display = 'flex';
-  if(happyHourInterval) clearInterval(happyHourInterval);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function toggleCategory(el){
-  const cat = el.parentElement;
-  const content = cat.querySelector('.category-content');
-  cat.classList.toggle('active');
-  if(cat.classList.contains('active')){
-    content.style.maxHeight = content.scrollHeight + 'px';
-  } else {
-    content.style.maxHeight = '0px';
-  }
-}
-
-// LOGIKA ZA DIJELJENJE RADNOG VREMENA / HAPPY HOUR (ZADANO OD 16:00 DO 19:00h)
-function updateHappyHourBar() {
-  if (!selectedLang) return;
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
-  
-  const startHour = 16;
-  const endHour = 19;
-  
-  const t = translations[selectedLang];
-  let message = "";
-  
-  if (currentHour >= startHour && currentHour < endHour) {
-    // Happy hour traje! Izračunaj preostale minute
-    const totalMinutesLeft = (endHour * 60) - (currentHour * 60 + currentMinute);
-    const hoursLeft = Math.floor(totalMinutesLeft / 60);
-    const minsLeft = totalMinutesLeft % 60;
-    
-    happyHourBar.className = "happy-hour-bar active-now";
-    const timeStr = hoursLeft > 0 ? `${hoursLeft}h ${minsLeft}min` : `${minsLeft}min`;
-    message = `${t.hhActive} <span class="highlight">${timeStr}</span>`;
-  } else {
-    // Happy hour ne traje. Izračunaj kad počinje
-    let diffMinutes = 0;
-    if (currentHour < startHour) {
-      diffMinutes = (startHour * 60) - (currentHour * 60 + currentMinute);
-    } else {
-      diffMinutes = ((24 + startHour) * 60) - (currentHour * 60 + currentMinute);
-    }
-    const hoursTo = Math.floor(diffMinutes / 60);
-    const minsTo = diffMinutes % 60;
-    
-    happyHourBar.className = "happy-hour-bar";
-    message = `${t.hhSoon} ${hoursTo}h ${minsTo}min`;
-  }
-  
-  document.getElementById('happyHourText').innerHTML = message;
-}
-
-// RULET METODE (IZABERI ZA MENE)
-function openRouletteModal() {
-  document.getElementById('rouletteResultName').innerText = "???";
-  document.getElementById('rouletteResultPrice').innerText = "-";
-  rouletteModal.style.display = 'flex';
-}
-
-function closeRouletteModal() {
-  rouletteModal.style.display = 'none';
-}
-
-function spinRoulette() {
-  const t = translations[selectedLang || 'bs'];
-  const itemsArray = [];
-  
-  // Pokupimo sve stavke iz prevoda (samo nazive artikala koji nisu opisi 'desc')
-  for (const key in t.items) {
-    if (!key.startsWith('desc')) {
-      // Pronalazak cijene tog artikla iz HTML-a radi tačnosti
-      const elementId = 'item' + key.charAt(0).toUpperCase() + key.slice(1);
-      const htmlItem = document.getElementById(elementId);
-      if (htmlItem) {
-        const priceElement = htmlItem.parentElement.nextElementSibling;
-        const priceText = priceElement ? priceElement.innerText : "";
-        itemsArray.push({ name: t.items[key], price: priceText });
-      }
-    }
-  }
-
-  if (itemsArray.length === 0) return;
-
-  const resultName = document.getElementById('rouletteResultName');
-  const resultPrice = document.getElementById('rouletteResultPrice');
-  const rollBtn = document.getElementById('rollActionBtn');
-  
-  rollBtn.disabled = true;
-  let counter = 0;
-  
-  // Efekat brzog mijenjanja naziva (vrtnja)
-  const interval = setInterval(() => {
-    const randomItem = itemsArray[Math.floor(Math.random() * itemsArray.length)];
-    resultName.innerText = randomItem.name;
-    resultName.style.color = "#aaa";
-    resultPrice.innerText = t.rouletteRolling;
-    counter++;
-    
-    if (counter > 15) {
-      clearInterval(interval);
-      // Krajnji rezultat
-      const finalItem = itemsArray[Math.floor(Math.random() * itemsArray.length)];
-      resultName.innerText = finalItem.name;
-      resultName.style.color = "#ff7a00";
-      resultPrice.innerText = finalItem.price;
-      rollBtn.disabled = false;
-    }
-  }, 100);
-}
-
-// WI-FI MODAL METODE
-function openWifiModal() { wifiModal.style.display = 'flex'; }
-function closeWifiModal() { wifiModal.style.display = 'none'; }
-
-function copyWifiPassword() {
-  const passwordText = document.getElementById('wifiPassword').innerText;
-  navigator.clipboard.writeText(passwordText).then(() => {
-    const copyBtn = document.getElementById('popCopyBtn');
-    const currentLang = selectedLang || 'bs';
-    copyBtn.innerText = translations[currentLang].wifiCopied;
-    copyBtn.style.background = '#00cc66';
-    
-    setTimeout(() => {
-      copyBtn.innerText = translations[currentLang].wifiCopy;
-      copyBtn.style.background = '#333';
-    }, 2000);
-  });
-}
-
-// BACK TO TOP I SKROLANJE
-window.onscroll = function() {
-  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-    if(menuScreen.style.display === 'block') {
-      backToTopBtn.style.display = "flex";
-    }
-  } else {
-    backToTopBtn.style.display = "none";
-  }
-};
-
-function scrollToTop() {
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
