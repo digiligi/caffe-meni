@@ -512,3 +512,44 @@ window.onscroll = function() {
   }
 };
 function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
+
+// LOGIKA ZA GALERIJU (BESKONAČNI KRUŽNI TOK)
+let currentGalleryIndex = 0;
+const totalSlides = 5; // Imamo tačno 5 slika (glr1 do glr5)
+
+function updateGalleryPosition() {
+  const slider = document.getElementById('gallerySlider');
+  const dots = document.querySelectorAll('.gallery-dots .dot');
+  
+  // Pomjeri slajder horizontalno na osnovu trenutnog indeksa
+  slider.style.transform = `translateX(-${currentGalleryIndex * 100}%)`;
+  
+  // Ažuriraj aktivnu tačkicu na dnu
+  dots.forEach((dot, idx) => {
+    if (idx === currentGalleryIndex) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+}
+
+function moveGallery(direction) {
+  currentGalleryIndex += direction;
+  
+  // Ako odemo preko zadnje slike (indeks 5), vrati na prvu (indeks 0)
+  if (currentGalleryIndex >= totalSlides) {
+    currentGalleryIndex = 0;
+  }
+  // Ako odemo iza prve slike (indeks -1), baci na zadnju (indeks 4)
+  else if (currentGalleryIndex < 0) {
+    currentGalleryIndex = totalSlides - 1;
+  }
+  
+  updateGalleryPosition();
+}
+
+function currentSlide(index) {
+  currentGalleryIndex = index;
+  updateGalleryPosition();
+}
